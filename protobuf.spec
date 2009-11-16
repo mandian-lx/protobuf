@@ -18,7 +18,7 @@
 Summary:		Protocol Buffers - Google's data interchange format
 Name:			protobuf
 Version:		2.2.0
-Release:		%mkrel 1
+Release:		%mkrel 2
 License:		BSD
 Group:			Development/Other
 Source:			http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
@@ -110,8 +110,8 @@ This package contains the Protocol Buffers compiler shared library.
 %package -n		%{develname}
 Summary:		Protocol Buffers C++ headers and libraries
 Group:			Development/Other
-Requires:		%{libname}
-Requires:		%{liblite}
+Requires:		%{libname} = %{version}
+Requires:		%{liblite} = %{version}
 Requires:		%{name}-compiler
 Requires:		pkgconfig
 
@@ -122,8 +122,8 @@ C++ headers and libraries.
 %package -n		%{staticdevelname}
 Summary:		Static development files for %{name}
 Group:			Development/Other
-Requires:		%{libname}
-Requires:		%{liblite}
+Requires:		%{libname} = %{version}
+Requires:		%{liblite} = %{version}
 
 %description -n		%{staticdevelname}
 This package contains static libraries for Protocol Buffers.
@@ -132,7 +132,6 @@ This package contains static libraries for Protocol Buffers.
 %package -n		python-%{name}
 Summary:		Python bindings for Google Protocol Buffers
 Group:			Development/Python
-BuildArch:		noarch
 Conflicts: %{name}-compiler > %{version}
 Conflicts: %{name}-compiler < %{version}
 
