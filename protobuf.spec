@@ -18,7 +18,7 @@
 Summary:		Protocol Buffers - Google's data interchange format
 Name:			protobuf
 Version:		2.2.0
-Release:		%mkrel 2
+Release:		%mkrel 3
 License:		BSD
 Group:			Development/Other
 Source:			http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
@@ -114,6 +114,7 @@ Requires:		%{libname} = %{version}
 Requires:		%{liblite} = %{version}
 Requires:		%{name}-compiler
 Requires:		pkgconfig
+Provides:		%{name}-devel = %{version}-%{release}
 
 %description -n		%{develname}
 This package contains Protocol Buffers compiler for all languages and
@@ -124,6 +125,7 @@ Summary:		Static development files for %{name}
 Group:			Development/Other
 Requires:		%{libname} = %{version}
 Requires:		%{liblite} = %{version}
+Provides:		%{name}-static-devel = %{version}-%{release}
 
 %description -n		%{staticdevelname}
 This package contains static libraries for Protocol Buffers.
