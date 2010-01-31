@@ -1,5 +1,5 @@
 # Major
-%define major		4
+%define major		6
 
 # Library names
 %define libname		%mklibname %{name} %{major}
@@ -17,8 +17,8 @@
 
 Summary:		Protocol Buffers - Google's data interchange format
 Name:			protobuf
-Version:		2.2.0
-Release:		%mkrel 3
+Version:		2.3.0
+Release:		%mkrel 1
 License:		BSD
 Group:			Development/Other
 Source:			http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
