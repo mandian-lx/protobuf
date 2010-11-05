@@ -28,7 +28,7 @@ BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:		pkgconfig
 BuildRequires:		gtest-devel
 %if %{with_python}
-%py_requires(d)
+BuildRequires:		python-devel
 BuildRequires:		python-setuptools
 %endif
 %if %{with_java}
