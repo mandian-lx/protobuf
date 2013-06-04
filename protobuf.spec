@@ -1,5 +1,5 @@
 # Major
-%define major 7
+%define major 8
 
 # Library names
 %define libname		%mklibname %{name} %{major}
@@ -19,11 +19,11 @@
 
 Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
-Version:	2.4.1
+Version:	2.5.0
 Release:	1
 License:	BSD
 Group:		Development/Other
-Source:		http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
+Source0:	http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
 Source1:	ftdetect-proto.vim
 URL:		http://code.google.com/p/protobuf/
 %if %{with gtest}
@@ -37,14 +37,6 @@ BuildRequires:	python-setuptools
 BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
 BuildRequires:	maven2
-BuildRequires:	maven2-plugin-compiler
-BuildRequires:	maven2-plugin-install
-BuildRequires:	maven2-plugin-jar
-BuildRequires:	maven2-plugin-javadoc
-BuildRequires:	maven2-plugin-release
-BuildRequires:	maven2-plugin-resources
-BuildRequires:	maven2-plugin-surefire
-BuildRequires:	maven2-plugin-antrun
 %endif
 
 %description
@@ -112,10 +104,10 @@ This package contains the Protocol Buffers compiler shared library.
 %package -n	%{develname}
 Summary:	Protocol Buffers C++ headers and libraries
 Group:		Development/Other
-Requires:	%{libname} = %{version}
-Requires:	%{liblite} = %{version}
+Requires:	%{libname} = %EVRD
+Requires:	%{liblite} = %EVRD
 Requires:	%{name}-compiler
-Provides:	%{name}-devel = %{version}-%{release}
+Provides:	%{name}-devel = %EVRD
 
 %description -n	%{develname}
 This package contains Protocol Buffers compiler for all languages and
@@ -124,9 +116,9 @@ C++ headers and libraries.
 %package -n	%{staticdevelname}
 Summary:	Static development files for %{name}
 Group:		Development/Other
-Requires:	%{libname} = %{version}
-Requires:	%{liblite} = %{version}
-Provides:	%{name}-static-devel = %{version}-%{release}
+Requires:	%{libname} = %EVRD
+Requires:	%{liblite} = %EVRD
+Provides:	%{name}-static-devel = %EVRD
 
 %description -n	%{staticdevelname}
 This package contains static libraries for Protocol Buffers.
@@ -135,8 +127,8 @@ This package contains static libraries for Protocol Buffers.
 %package -n	python-%{name}
 Summary:	Python bindings for Google Protocol Buffers
 Group:		Development/Python
-Conflicts:	%{name}-compiler > %{version}
-Conflicts:	%{name}-compiler < %{version}
+Conflicts:	%{name}-compiler > %EVRD
+Conflicts:	%{name}-compiler < %EVRD
 
 %description -n	python-%{name}
 This package contains Python bindings for Google Protocol Buffers.
