@@ -8,36 +8,35 @@
 %define develname	%mklibname %{name} -d
 %define staticdevelname	%mklibname %{name} -d -s
 
-# don't build python subpackage
-%define with_python %{?_without_python: 0} %{?!_without_python: 1}
-# don't build -java subpackages
-# -- -- %define with_java     %{?_without_java:   0} %{?!_without_java:   1}
-# 15 nov 2009 : java part of the package broken, don't build the subpackages
-%define with_java 0
-
-%bcond_with gtest
+%bcond_with	gtest
+%bcond_without	python
+%bcond_with	java
 
 Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
 Version:	2.5.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Other
 Source0:	http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
 Source1:	ftdetect-proto.vim
 URL:		http://code.google.com/p/protobuf/
-%if %{with gtest}
-BuildRequires:	gtest-devel
-%endif
-%if %{with_python}
+
+%if %{with python}
 BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 %endif
-%if %{with_java}
+
+%if %{with java}
 BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
 BuildRequires:	maven2
 %endif
+
+%if %{with gtest}
+BuildRequires:	gtest-devel
+%endif
+
 
 %description
 Protocol Buffers are a way of encoding structured data in an efficient
@@ -123,7 +122,7 @@ Provides:	%{name}-static-devel = %EVRD
 %description -n	%{staticdevelname}
 This package contains static libraries for Protocol Buffers.
 
-%if %{with_python}
+%if %{with python}
 %package -n	python-%{name}
 Summary:	Python bindings for Google Protocol Buffers
 Group:		Development/Python
@@ -143,7 +142,7 @@ Requires:	vim-enhanced
 This package contains syntax highlighting for Google Protocol Buffers
 descriptions in Vim editor.
 
-%if %{with_java}
+%if %{with java}
 %package	java
 Summary:	Java Protocol Buffers runtime library
 Group:		Development/Java
@@ -175,17 +174,17 @@ chmod 644 examples/*
 %build
 export PTHREAD_LIBS="-lpthread"
 ./autogen.sh
-%configure
+%configure --enable-static
 %make
 
-%if %{with_python}
+%if %{with python}
 pushd python
 %__python ./setup.py build
 sed -i -e 1d build/lib/google/protobuf/descriptor_pb2.py
 popd
 %endif
 
-%if %{with_java}
+%if %{with java}
 pushd java
 export MAVEN_REPO_LOCAL=$(pwd)/.m2/repository
 mkdir -p $MAVEN_REPO_LOCAL
@@ -201,7 +200,7 @@ popd
 %makeinstall
 find %{buildroot} -type f -name "*.la" -exec rm -f {} \;
 
-%if %{with_python}
+%if %{with python}
 pushd python
 %__python ./setup.py install --root=%{buildroot} --single-version-externally-managed --record=INSTALLED_FILES --optimize=1
 popd
@@ -210,7 +209,7 @@ popd
 install -p -m 644 -D %{SOURCE1} %{buildroot}%{_datadir}/vim/vimfiles/ftdetect/proto.vim
 install -p -m 644 -D editors/proto.vim %{buildroot}%{_datadir}/vim/vimfiles/syntax/proto.vim
 
-%if %{with_java}
+%if %{with java}
 pushd java
 install -d -m 755 %{buildroot}%{_javadir}
 install -pm 644 target/%{name}-java-%{version}.jar %{buildroot}%{_javadir}/%{name}-%{version}.jar
@@ -224,7 +223,7 @@ install -pm 644 pom.xml %{buildroot}%{_datadir}/maven2/poms/JPP-%{name}.pom
 popd
 %endif
 
-%if %{with_java}
+%if %{with java}
 %post java
 %update_maven_depmap
 
@@ -263,7 +262,7 @@ popd
 %{_libdir}/lib%{name}-lite.a
 %{_libdir}/libprotoc.a
 
-%if %{with_python}
+%if %{with python}
 %files -n python-%{name}
 %doc python/README.txt
 %doc examples/add_person.py examples/list_people.py examples/addressbook.proto
@@ -277,7 +276,7 @@ popd
 %{_datadir}/vim/vimfiles/ftdetect/proto.vim
 %{_datadir}/vim/vimfiles/syntax/proto.vim
 
-%if %{with_java}
+%if %{with java}
 %files java
 %doc examples/AddPerson.java examples/ListPeople.java
 %{_datadir}/maven2/poms/JPP-%{name}.pom
