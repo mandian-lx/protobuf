@@ -4,9 +4,9 @@
 # Library names
 %define libname		%mklibname %{name} %{major}
 %define liblite		%mklibname %{name}-lite %{major}
-%define libcompiler	%mklibname protoc %{major}
-%define develname	%mklibname %{name} -d
-%define staticdevelname	%mklibname %{name} -d -s
+%define libprotoc	%mklibname protoc %{major}
+%define devname	%mklibname %{name} -d
+%define statname	%mklibname %{name} -d -s
 
 %bcond_with	gtest
 %bcond_without	python
@@ -18,12 +18,12 @@ Version:	2.5.0
 Release:	2
 License:	BSD
 Group:		Development/Other
+Url:		http://code.google.com/p/protobuf/
 Source0:	http://protobuf.googlecode.com/files/%{name}-%{version}.tar.bz2
 Source1:	ftdetect-proto.vim
-URL:		http://code.google.com/p/protobuf/
 
 %if %{with python}
-BuildRequires:	python-devel
+BuildRequires:	pkgconfig(python)
 BuildRequires:	python-setuptools
 %endif
 
@@ -36,7 +36,6 @@ BuildRequires:	maven2
 %if %{with gtest}
 BuildRequires:	gtest-devel
 %endif
-
 
 %description
 Protocol Buffers are a way of encoding structured data in an efficient
@@ -86,48 +85,46 @@ other features.
 %package	compiler
 Summary:	Protocol Buffers compiler
 Group:		Development/Other
-Suggests:	%{libname}
-Suggests:	%{liblite}
 
 %description	compiler
 This package contains Protocol Buffers compiler for all programming
 languages.
 
-%package -n	%{libcompiler}
+%package -n	%{libprotoc}
 Summary:	Protocol Buffers compiler shared library
 Group:		System/Libraries
 
-%description -n	%{libcompiler}
+%description -n	%{libprotoc}
 This package contains the Protocol Buffers compiler shared library.
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	Protocol Buffers C++ headers and libraries
 Group:		Development/Other
-Requires:	%{libname} = %EVRD
-Requires:	%{liblite} = %EVRD
+Requires:	%{libname} = %{EVRD}
+Requires:	%{liblite} = %{EVRD}
+Requires:	%{libprotoc} = %{EVRD}
 Requires:	%{name}-compiler
-Provides:	%{name}-devel = %EVRD
+Provides:	%{name}-devel = %{EVRD}
 
-%description -n	%{develname}
+%description -n	%{devname}
 This package contains Protocol Buffers compiler for all languages and
 C++ headers and libraries.
 
-%package -n	%{staticdevelname}
+%package -n	%{statname}
 Summary:	Static development files for %{name}
 Group:		Development/Other
-Requires:	%{libname} = %EVRD
-Requires:	%{liblite} = %EVRD
-Provides:	%{name}-static-devel = %EVRD
+Requires:	%{devname} = %{EVRD}
+Provides:	%{name}-static-devel = %{EVRD}
 
-%description -n	%{staticdevelname}
+%description -n	%{statname}
 This package contains static libraries for Protocol Buffers.
 
 %if %{with python}
 %package -n	python-%{name}
 Summary:	Python bindings for Google Protocol Buffers
 Group:		Development/Python
-Conflicts:	%{name}-compiler > %EVRD
-Conflicts:	%{name}-compiler < %EVRD
+Conflicts:	%{name}-compiler > %{EVRD}
+Conflicts:	%{name}-compiler < %{EVRD}
 
 %description -n	python-%{name}
 This package contains Python bindings for Google Protocol Buffers.
@@ -148,8 +145,7 @@ Summary:	Java Protocol Buffers runtime library
 Group:		Development/Java
 Requires:	java
 Requires:	jpackage-utils
-Requires(post):	jpackage-utils
-Requires(postun): jpackage-utils
+Requires(post,postun):	jpackage-utils
 Conflicts:	%{name}-compiler > %{version}
 Conflicts:	%{name}-compiler < %{version}
 
@@ -164,7 +160,6 @@ Requires:	%{name}-java
 
 %description	javadoc
 This package contains the API documentation for %{name}-java.
-
 %endif
 
 %prep
@@ -243,10 +238,10 @@ popd
 %doc COPYING.txt README.txt
 %{_bindir}/protoc
 
-%files -n %{libcompiler}
+%files -n %{libprotoc}
 %{_libdir}/libprotoc.so.%{major}*
 
-%files -n %{develname}
+%files -n %{devname}
 %doc examples/add_person.cc examples/addressbook.proto
 %doc  examples/list_people.cc examples/Makefile examples/README.txt
 %dir %{_includedir}/google
@@ -257,7 +252,7 @@ popd
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/pkgconfig/%{name}-lite.pc
 
-%files -n %{staticdevelname}
+%files -n %{statname}
 %{_libdir}/lib%{name}.a
 %{_libdir}/lib%{name}-lite.a
 %{_libdir}/libprotoc.a
@@ -286,43 +281,4 @@ popd
 %files javadoc
 %{_javadocdir}/%{name}
 %endif
-
-
-
-%changelog
-* Thu May 05 2011 Oden Eriksson <oeriksson@mandriva.com> 2.3.0-3mdv2011.0
-+ Revision: 667890
-- mass rebuild
-
-* Fri Nov 05 2010 Götz Waschk <waschk@mandriva.org> 2.3.0-2mdv2011.0
-+ Revision: 593736
-- fix python build dep
-
-* Fri Feb 26 2010 Oden Eriksson <oeriksson@mandriva.com> 2.3.0-2mdv2010.1
-+ Revision: 511714
-- rebuild
-
-* Sun Jan 31 2010 Jérôme Brenier <incubusss@mandriva.org> 2.3.0-1mdv2010.1
-+ Revision: 498723
-- new version 2.3.0
-
-* Mon Nov 16 2009 Jérôme Brenier <incubusss@mandriva.org> 2.2.0-3mdv2010.1
-+ Revision: 466674
-- add provides : %%{name}-devel to the devel subpackage
-- add provides : %%{name}-static-devel to the static devel subpackage
-
-* Mon Nov 16 2009 Jérôme Brenier <incubusss@mandriva.org> 2.2.0-2mdv2010.1
-+ Revision: 466548
-- remove BuildArch : noarch for the python subpackage
-- version requires of devel packages
-
-* Mon Nov 16 2009 Jérôme Brenier <incubusss@mandriva.org> 2.2.0-1mdv2010.1
-+ Revision: 466399
-- version 2.2.0
-- specfile completely modified based on Kevin Deldycke 's work (#53573),
-  itself based on a Fedora package
-
-  + Colin Guthrie <cguthrie@mandriva.org>
-    - import protobuf
-
 
