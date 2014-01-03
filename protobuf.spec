@@ -20,7 +20,6 @@
 %global emacs_lispdir %(pkg-config emacs --variable sitepkglispdir)
 %global emacs_startdir %(pkg-config emacs --variable sitestartdir)
 %else
-%global emacs_version %(emacs --version|head -1|sed -e 's/[^0-9]*//')
 %global emacs_lispdir %{_datadir}/emacs/site-lisp
 %global emacs_startdir %{_datadir}/emacs/site-lisp/site-start.d
 %endif
@@ -140,8 +139,10 @@ Summary: Python bindings for Google Protocol Buffers
 
 BuildRequires: python-devel
 BuildRequires: python-setuptools
+%if 0%{?fedora}
 Conflicts: %{name}-compiler > %{version}
 Conflicts: %{name}-compiler < %{version}
+%endif
 
 %description python
 This package contains Python libraries for Google Protocol Buffers
@@ -159,7 +160,9 @@ descriptions in Vim editor
 %package emacs
 Summary: Emacs mode for Google Protocol Buffers descriptions
 
+%if 0%{?fedora}
 Requires: emacs >= 0%{emacs_version}
+%endif
 
 %description emacs
 This package contains syntax highlighting for Google Protocol Buffers
@@ -192,10 +195,13 @@ BuildRequires:    maven-surefire-plugin
 BuildRequires:    maven-antrun-plugin
 Requires:         java
 Requires:         jpackage-utils
+%if 0%{?fedora}
 Conflicts:        %{name}-compiler > %{version}
 Conflicts:        %{name}-compiler < %{version}
+%else
 Provides:         mvn(com.google.protobuf:protobuf-java) = %{version}
 Provides:         osgi(com.google.protobuf.java) = %{version}
+%endif
 
 %description java
 This package contains Java Protocol Buffers runtime library.
