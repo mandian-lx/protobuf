@@ -5,9 +5,9 @@
 %define old_statname	%mklibname %{name} -d -s
 
 # Build -python subpackage
-%bcond_without python
+%bcond_with python
 # Build -java subpackage
-%bcond_without java
+%bcond_with java
 # Don't require gtest
 %bcond_with gtest
 
@@ -30,12 +30,12 @@ Version:        2.5.0
 Release:        5%{?dist}
 License:        BSD
 
-Source:         http://protobuf.googlecode.com/files/protobuf-%{version}.tar.bz2
+Source0:        http://protobuf.googlecode.com/files/protobuf-%{version}.tar.bz2
 Source1:        ftdetect-proto.vim
 Source2:        protobuf-init.el
 Source3:        %{name}.rpmlintrc
 Patch1:         protobuf-2.5.0-fedora-gtest.patch
-Patch2:    	    protobuf-2.5.0-java-fixes.patch
+Patch2:		protobuf-2.5.0-java-fixes.patch
 Patch3:         0001-Add-generic-GCC-support-for-atomic-operations.patch
 Patch4:         protobuf-2.5.0-makefile.patch
 URL:            http://code.google.com/p/protobuf/
@@ -286,35 +286,22 @@ install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{name}.pom
 popd
 %endif
 
-mkdir -p $RPM_BUILD_ROOT%{emacs_lispdir}
-mkdir -p $RPM_BUILD_ROOT%{emacs_startdir}
-install -p -m 0644 editors/protobuf-mode.el $RPM_BUILD_ROOT%{emacs_lispdir}
-install -p -m 0644 editors/protobuf-mode.elc $RPM_BUILD_ROOT%{emacs_lispdir}
-install -p -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{emacs_startdir}
-
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
-%post lite -p /sbin/ldconfig
-%postun lite -p /sbin/ldconfig
-
-%post compiler -p /sbin/ldconfig
-%postun compiler -p /sbin/ldconfig
+mkdir -p %{buildroot}%{emacs_lispdir}
+mkdir -p %{buildroot}%{emacs_startdir}
+install -p -m 0644 editors/protobuf-mode.el %{buildroot}%{emacs_lispdir}
+install -p -m 0644 editors/protobuf-mode.elc %{buildroot}%{emacs_lispdir}
+install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 
 %files
-%defattr(-, root, root, -)
 %{_libdir}/libprotobuf.so.*
 %doc CHANGES.txt CONTRIBUTORS.txt COPYING.txt README.txt
 
 %files compiler
-%defattr(-, root, root, -)
 %{_bindir}/protoc
 %{_libdir}/libprotoc.so.*
 %doc COPYING.txt README.txt
 
 %files devel
-%defattr(-, root, root, -)
 %dir %{_includedir}/google
 %{_includedir}/google/protobuf/
 %{_libdir}/libprotobuf.so
@@ -330,23 +317,19 @@ install -p -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{emacs_startdir}
 %endif
 
 %files lite
-%defattr(-, root, root, -)
 %{_libdir}/libprotobuf-lite.so.*
 
 %files lite-devel
-%defattr(-, root, root, -)
 %{_libdir}/libprotobuf-lite.so
 %{_libdir}/pkgconfig/protobuf-lite.pc
 
 %if 0%{?fedora}
 %files lite-static
-%defattr(-, root, root, -)
 %{_libdir}/libprotobuf-lite.a
 %endif
 
 %if %{with python}
 %files python
-%defattr(-, root, root, -)
 %dir %{python_sitelib}/google
 %{python_sitelib}/google/protobuf/
 %{python_sitelib}/protobuf-%{version}-py2.?.egg-info/
@@ -356,109 +339,23 @@ install -p -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{emacs_startdir}
 %endif
 
 %files vim
-%defattr(-, root, root, -)
 %{_datadir}/vim/vimfiles/ftdetect/proto.vim
 %{_datadir}/vim/vimfiles/syntax/proto.vim
 
 %files emacs
-%defattr(-,root,root,-)
 %{emacs_startdir}/protobuf-init.el
 %{emacs_lispdir}/protobuf-mode.elc
 
 %files emacs-el
-%defattr(-,root,root,-)
 %{emacs_lispdir}/protobuf-mode.el
 
 %if %{with java}
 %files java
-%defattr(-, root, root, -)
 %{_mavenpomdir}/JPP-%{name}.pom
 %{_mavendepmapfragdir}/%{name}
 %{_javadir}/%{name}.jar
 %doc examples/AddPerson.java examples/ListPeople.java
 
 %files javadoc
-%defattr(-, root, root, -)
 %{_javadocdir}/%{name}
 %endif
-
-%changelog
-* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.5.0-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
-
-* Thu May 16 2013 Dan Horák <dan[at]danny.cz> - 2.5.0-4
-- export the new generic atomics header (rh #926374)
-
-* Mon May 6 2013 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.5.0-3
-- Add support for generic gcc atomic operations (rh #926374)
-
-* Sat Apr 27 2013 Conrad Meyer <cemeyer@uw.edu> - 2.5.0-2
-- Remove changelog history from before 2010
-- This spec already runs autoreconf -fi during %%build, but bump build for
-  rhbz #926374
-
-* Sat Mar 9 2013 Conrad Meyer <cemeyer@uw.edu> - 2.5.0-1
-- Bump to latest upstream (#883822)
-- Rebase gtest, maven patches on 2.5.0
-
-* Tue Feb 26 2013 Conrad Meyer <cemeyer@uw.edu> - 2.4.1-12
-- Nuke BR on maven-doxia, maven-doxia-sitetools (#915620)
-
-* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.1-11
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
-
-* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 2.4.1-10
-- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
-- Replace maven BuildRequires with maven-local
-
-* Sun Jan 20 2013 Conrad Meyer <konrad@tylerc.org> - 2.4.1-9
-- Fix packaging bug, -emacs-el subpackage should depend on -emacs subpackage of
-  the same version (%%version), not the emacs version number...
-
-* Thu Jan 17 2013 Tim Niemueller <tim@niemueller.de> - 2.4.1-8
-- Added sub-package for Emacs editing mode
-
-* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.1-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
-
-* Mon Mar 19 2012 Dan Horák <dan[at]danny.cz> - 2.4.1-6
-- disable test-suite until g++ 4.7 issues are resolved
-
-* Mon Mar 19 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.4.1-5
-- Update to latest java packaging guidelines
-
-* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.1-4
-- Rebuilt for c++ ABI breakage
-
-* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.1-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
-
-* Tue Sep 27 2011 Pierre-Yves Chibon <pingou@pingoured.fr> - 2.4.1-2
-- Adding zlib-devel as BR (rhbz: #732087)
-
-* Thu Jun 09 2011 BJ Dierkes <wdierkes@rackspace.com> - 2.4.1-1
-- Latest sources from upstream.
-- Rewrote Patch2 as protobuf-2.4.1-java-fixes.patch
-
-* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.0-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-
-* Thu Jan 13 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 2.3.0-6
-- Fix java subpackage bugs #669345 and #669346
-- Use new maven plugin names
-- Use mavenpomdir macro for pom installation
-
-* Mon Jul 26 2010 David Malcolm <dmalcolm@redhat.com> - 2.3.0-5
-- generalize hardcoded reference to 2.6 in python subpackage %%files manifest
-
-* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 2.3.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
-
-* Thu Jul 15 2010 James Laska <jlaska@redhat.com> - 2.3.0-3
-- Correct use of %bcond macros
-
-* Wed Jul 14 2010 James Laska <jlaska@redhat.com> - 2.3.0-2
-- Enable python and java sub-packages
-
-* Tue May 4 2010 Conrad Meyer <konrad@tylerc.org> - 2.3.0-1
-- bump to 2.3.0
