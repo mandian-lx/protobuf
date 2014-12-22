@@ -7,7 +7,11 @@
 # Build -python subpackage
 %bcond_with python
 # Build -java subpackage
+%ifarch %{ix86} x86_64
 %bcond_without java
+%else
+%bcond_with java
+%endif
 # Don't require gtest
 %bcond_with gtest
 
