@@ -7,7 +7,7 @@
 # Build -python subpackage
 %bcond_with python
 # Build -java subpackage
-%bcond_with java
+%bcond_without java
 # Don't require gtest
 %bcond_with gtest
 
@@ -27,7 +27,7 @@
 Summary:        Protocol Buffers - Google's data interchange format
 Name:           protobuf
 Version:        2.5.0
-Release:        5%{?dist}
+Release:        6
 License:        BSD
 
 Source0:        http://protobuf.googlecode.com/files/protobuf-%{version}.tar.bz2
@@ -250,7 +250,8 @@ popd
 
 %if %{with java}
 pushd java
-mvn-rpmbuild install javadoc:javadoc
+%mvn_file : %{name}
+%mvn_build
 popd
 %endif
 
@@ -274,15 +275,7 @@ install -p -m 644 -D editors/proto.vim %{buildroot}%{_datadir}/vim/vimfiles/synt
 
 %if %{with java}
 pushd java
-install -d -m 755 %{buildroot}%{_javadir}
-install -pm 644 target/%{name}-java-%{version}.jar %{buildroot}%{_javadir}/%{name}.jar
-
-install -d -m 755 %{buildroot}%{_javadocdir}/%{name}
-cp -rp target/site/apidocs %{buildroot}%{_javadocdir}/%{name}
-
-install -d -m 755 %{buildroot}%{_mavenpomdir}
-install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{name}.pom
-%add_maven_depmap JPP-%{name}.pom %{name}.jar
+%mvn_install
 popd
 %endif
 
@@ -350,10 +343,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 %{emacs_lispdir}/protobuf-mode.el
 
 %if %{with java}
-%files java
-%{_mavenpomdir}/JPP-%{name}.pom
-%{_mavendepmapfragdir}/%{name}
-%{_javadir}/%{name}.jar
+%files java -f java/.mfiles
 %doc examples/AddPerson.java examples/ListPeople.java
 
 %files javadoc
