@@ -1,8 +1,8 @@
-%define old_libname	%mklibname %{name} 8
-%define old_liblite	%mklibname %{name}-lite 8
-%define old_libprotoc	%mklibname protoc 8
-%define old_devname	%mklibname %{name} -d
-%define old_statname	%mklibname %{name} -d -s
+%define old_libname %mklibname %{name} 8
+%define old_liblite %mklibname %{name}-lite 8
+%define old_libprotoc %mklibname protoc 8
+%define old_devname %mklibname %{name} -d
+%define old_statname %mklibname %{name} -d -s
 
 # Build -python subpackage
 %bcond_with python
@@ -19,35 +19,27 @@
 %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 %endif
 
-%if 0%{?fedora}
-%global emacs_version %(pkg-config emacs --modversion)
-%global emacs_lispdir %(pkg-config emacs --variable sitepkglispdir)
-%global emacs_startdir %(pkg-config emacs --variable sitestartdir)
-%else
 %global emacs_lispdir %{_datadir}/emacs/site-lisp
 %global emacs_startdir %{_datadir}/emacs/site-lisp/site-start.d
-%endif
 
-Summary:        Protocol Buffers - Google's data interchange format
-Name:           protobuf
-Version:        2.5.0
-Release:        7
-License:        BSD
+Summary:	Protocol Buffers - Google's data interchange format
+Name:		protobuf
+Version:	2.6.1
+Release:	1
+License:	BSD
+URL:		https://github.com/google/protobuf
+Source0:	https://github.com/google/protobuf/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source1:	ftdetect-proto.vim
+Source2:	protobuf-init.el
+Source3:	%{name}.rpmlintrc
+Patch0:		protobuf-2.5.0-emacs-24.4.patch
+Patch1:		protobuf-2.5.0-fedora-gtest.patch
 
-Source0:        http://protobuf.googlecode.com/files/protobuf-%{version}.tar.bz2
-Source1:        ftdetect-proto.vim
-Source2:        protobuf-init.el
-Source3:        %{name}.rpmlintrc
-Patch1:         protobuf-2.5.0-fedora-gtest.patch
-Patch2:		protobuf-2.5.0-java-fixes.patch
-Patch3:         0001-Add-generic-GCC-support-for-atomic-operations.patch
-Patch4:         protobuf-2.5.0-makefile.patch
-URL:            http://code.google.com/p/protobuf/
-BuildRequires:  automake autoconf libtool pkgconfig zlib-devel
-BuildRequires:  emacs
-BuildRequires:  emacs-el >= 24.1
+BuildRequires:	automake autoconf libtool pkgconfig zlib-devel
+BuildRequires:	emacs
+BuildRequires:	emacs-el >= 24.1
 %if %{with gtest}
-BuildRequires:  gtest-devel
+BuildRequires:	gtest-devel
 %endif
 %rename %{old_libname}
 %rename %{old_liblite}
@@ -67,40 +59,26 @@ variety of languages. You can even update your data structure without
 breaking deployed programs that are compiled against the "old" format.
 
 %package compiler
-Summary: Protocol Buffers compiler
-
-Requires: %{name} = %{version}-%{release}
+Summary:	Protocol Buffers compiler
+Requires:	%{name} = %{EVRD}
 
 %description compiler
 This package contains Protocol Buffers compiler for all programming
-languages
+languages.
 
 %package devel
-Summary: Protocol Buffers C++ headers and libraries
-
-Requires: %{name} = %{version}-%{release}
-Requires: %{name}-compiler = %{version}-%{release}
-Requires: pkgconfig
+Summary:	Protocol Buffers C++ headers and libraries
+Requires:	%{name} = %{EVRD}
+Requires:	%{name}-compiler = %{EVRD}
+Requires:	pkgconfig
 %rename %{old_devname}
 
 %description devel
 This package contains Protocol Buffers compiler for all languages and
 C++ headers and libraries
 
-%if 0%{?fedora}
-%package static
-Summary: Static development files for %{name}
-
-Requires: %{name} = %{version}-%{release}
-%rename %{old_statname}
-
-%description static
-Static libraries for Protocol Buffers
-%endif
-
 %package lite
-Summary: Protocol Buffers LITE_RUNTIME libraries
-
+Summary:	Protocol Buffers LITE_RUNTIME libraries
 
 %description lite
 Protocol Buffers built with optimize_for = LITE_RUNTIME.
@@ -110,9 +88,9 @@ which only depends libprotobuf-lite, which is much smaller than libprotobuf but
 lacks descriptors, reflection, and some other features.
 
 %package lite-devel
-Summary: Protocol Buffers LITE_RUNTIME development libraries
-Requires: %{name}-devel = %{version}-%{release}
-Requires: %{name}-lite = %{version}-%{release}
+Summary:	Protocol Buffers LITE_RUNTIME development libraries
+Requires:	%{name}-devel = %{EVRD}
+Requires:	%{name}-lite = %{EVRD}
 
 %description lite-devel
 This package contains development libraries built with
@@ -122,60 +100,34 @@ The "optimize_for = LITE_RUNTIME" option causes the compiler to generate code
 which only depends libprotobuf-lite, which is much smaller than libprotobuf but
 lacks descriptors, reflection, and some other features.
 
-%if 0%{?fedora}
-%package lite-static
-Summary: Static development files for %{name}-lite
-
-Requires: %{name}-devel = %{version}-%{release}
-
-%description lite-static
-This package contains static development libraries built with
-optimize_for = LITE_RUNTIME.
-
-The "optimize_for = LITE_RUNTIME" option causes the compiler to generate code
-which only depends libprotobuf-lite, which is much smaller than libprotobuf but
-lacks descriptors, reflection, and some other features.
-%endif
-
 %if %{with python}
 %package python
-Summary: Python bindings for Google Protocol Buffers
-
-BuildRequires: python-devel
-BuildRequires: python-setuptools
-%if 0%{?fedora}
-Conflicts: %{name}-compiler > %{version}
-Conflicts: %{name}-compiler < %{version}
-%endif
+Summary:	Python bindings for Google Protocol Buffers
+BuildRequires:	python-devel
+BuildRequires:	python-setuptools
 
 %description python
 This package contains Python libraries for Google Protocol Buffers
 %endif
 
 %package vim
-Summary: Vim syntax highlighting for Google Protocol Buffers descriptions
-
-Requires: vim-enhanced
+Summary:	Vim syntax highlighting for Google Protocol Buffers descriptions
+Requires:	vim-enhanced
 
 %description vim
 This package contains syntax highlighting for Google Protocol Buffers
 descriptions in Vim editor
 
 %package emacs
-Summary: Emacs mode for Google Protocol Buffers descriptions
-
-%if 0%{?fedora}
-Requires: emacs >= 0%{emacs_version}
-%endif
+Summary:	Emacs mode for Google Protocol Buffers descriptions
 
 %description emacs
 This package contains syntax highlighting for Google Protocol Buffers
 descriptions in the Emacs editor.
 
 %package emacs-el
-Summary: Elisp source files for Google protobuf Emacs mode
-
-Requires: protobuf-emacs = %{version}
+Summary:	Elisp source files for Google protobuf Emacs mode
+Requires:	protobuf-emacs = %{version}
 
 %description emacs-el
 This package contains the elisp source files for %{name}-emacs
@@ -185,36 +137,29 @@ under GNU Emacs. You do not need to install this package to use
 
 %if %{with java}
 %package java
-Summary: Java Protocol Buffers runtime library
-
-BuildRequires:    java-devel >= 1.6
-BuildRequires:    jpackage-utils
-BuildRequires:    maven-local
-BuildRequires:    maven-compiler-plugin
-BuildRequires:    maven-install-plugin
-BuildRequires:    maven-jar-plugin
-BuildRequires:    maven-javadoc-plugin
-BuildRequires:    maven-resources-plugin
-BuildRequires:    maven-surefire-plugin
-BuildRequires:    maven-antrun-plugin
-Requires:         java
-Requires:         jpackage-utils
-%if 0%{?fedora}
-Conflicts:        %{name}-compiler > %{version}
-Conflicts:        %{name}-compiler < %{version}
-%else
-Provides:         mvn(com.google.protobuf:protobuf-java) = %{version}
-Provides:         osgi(com.google.protobuf.java) = %{version}
-%endif
+Summary:	Java Protocol Buffers runtime library
+BuildRequires:	java-devel >= 1.6
+BuildRequires:	jpackage-utils
+BuildRequires:	maven-local
+BuildRequires:	maven-compiler-plugin
+BuildRequires:	maven-install-plugin
+BuildRequires:	maven-jar-plugin
+BuildRequires:	maven-javadoc-plugin
+BuildRequires:	maven-resources-plugin
+BuildRequires:	maven-surefire-plugin
+BuildRequires:	maven-antrun-plugin
+Requires:	java
+Requires:	jpackage-utils
+Provides:	mvn(com.google.protobuf:protobuf-java) = %{version}
+Provides:	osgi(com.google.protobuf.java) = %{version}
 
 %description java
 This package contains Java Protocol Buffers runtime library.
 
 %package javadoc
-Summary: Javadocs for %{name}-java
-
-Requires: jpackage-utils
-Requires: %{name}-java = %{version}-%{release}
+Summary:	Javadocs for %{name}-java
+Requires:	jpackage-utils
+Requires:	%{name}-java = %{EVRD}
 
 %description javadoc
 This package contains the API documentation for %{name}-java.
@@ -223,18 +168,15 @@ This package contains the API documentation for %{name}-java.
 
 %prep
 %setup -q
+%patch0 -p1 -b .emacs
 %if %{with gtest}
 rm -rf gtest
 %patch1 -p1 -b .gtest
 %endif
 chmod 644 examples/*
 %if %{with java}
-%patch2 -p1 -b .java-fixes
 rm -rf java/src/test
 %endif
-
-%patch3 -p1 -b .generic-atomics
-%patch4 -p1 -b .generic-atomics-makefile
 
 %build
 iconv -f iso8859-1 -t utf-8 CONTRIBUTORS.txt > CONTRIBUTORS.txt.utf8
@@ -243,7 +185,7 @@ export PTHREAD_LIBS="-lpthread"
 ./autogen.sh
 %configure --disable-static
 
-make %{?_smp_mflags}
+%make
 
 %if %{with python}
 pushd python
@@ -306,13 +248,6 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 %{_libdir}/pkgconfig/protobuf.pc
 %doc examples/add_person.cc examples/addressbook.proto examples/list_people.cc examples/Makefile examples/README.txt
 
-%if 0%{?fedora}
-%files static
-%defattr(-, root, root, -)
-%{_libdir}/libprotobuf.a
-%{_libdir}/libprotoc.a
-%endif
-
 %files lite
 %{_libdir}/libprotobuf-lite.so.*
 
@@ -320,10 +255,6 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 %{_libdir}/libprotobuf-lite.so
 %{_libdir}/pkgconfig/protobuf-lite.pc
 
-%if 0%{?fedora}
-%files lite-static
-%{_libdir}/libprotobuf-lite.a
-%endif
 
 %if %{with python}
 %files python
