@@ -148,6 +148,8 @@ BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-resources-plugin
 BuildRequires:	maven-surefire-plugin
 BuildRequires:	maven-antrun-plugin
+BuildRequires:	mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:	mvn(org.apache.maven.plugins:maven-antrun-plugin)
 Requires:	java
 Requires:	jpackage-utils
 Provides:	mvn(com.google.protobuf:protobuf-java) = %{version}
