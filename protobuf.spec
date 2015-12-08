@@ -8,7 +8,7 @@
 %bcond_with python
 # Build -java subpackage
 %ifarch %{ix86} x86_64
-%bcond_without java
+%bcond_with java
 %else
 %bcond_with java
 %endif
