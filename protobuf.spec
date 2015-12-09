@@ -210,7 +210,7 @@ emacs -batch -f batch-byte-compile editors/protobuf-mode.el
 
 %install
 rm -rf %{buildroot}
-make %{?_smp_mflags} install DESTDIR=%{buildroot} STRIPBINARIES=no INSTALL="%{__install} -p" CPPROG="cp -p"
+%makeinstall_std DESTDIR=%{buildroot} STRIPBINARIES=no INSTALL="%{__install} -p" CPPROG="cp -p"
 find %{buildroot} -type f -name "*.la" -exec rm -f {} \;
 
 %if %{with python}
@@ -235,7 +235,7 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 
 %files
 %{_libdir}/libprotobuf.so.*
-%doc CHANGES.txt CONTRIBUTORS.txt COPYING.txt README.txt
+%doc CHANGES.txt CONTRIBUTORS.txt
 
 %files compiler
 %{_bindir}/protoc
