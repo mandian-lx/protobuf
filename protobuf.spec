@@ -240,7 +240,6 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{emacs_startdir}
 %files compiler
 %{_bindir}/protoc
 %{_libdir}/libprotoc.so.*
-%doc COPYING.txt README.txt
 
 %files devel
 %dir %{_includedir}/google
