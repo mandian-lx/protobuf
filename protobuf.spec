@@ -177,6 +177,8 @@ rm -rf gtest
 %endif
 chmod 644 examples/*
 %if %{with java}
+%pom_remove_parent java/pom.xml
+%pom_remove_dep org.easymock:easymockclassextension java/pom.xml
 rm -rf java/src/test
 %endif
 
