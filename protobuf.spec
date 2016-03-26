@@ -25,7 +25,7 @@
 Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
 Version:	2.6.1
-Release:	2
+Release:	3
 License:	BSD
 URL:		https://github.com/google/protobuf
 Source0:	https://github.com/google/protobuf/releases/download/v%{version}/%{name}-%{version}.tar.bz2
