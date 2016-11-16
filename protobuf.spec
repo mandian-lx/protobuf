@@ -26,6 +26,7 @@ Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
 Version:	2.6.1
 Release:	3
+Group:		Development/Other
 License:	BSD
 URL:		https://github.com/google/protobuf
 Source0:	https://github.com/google/protobuf/releases/download/v%{version}/%{name}-%{version}.tar.bz2
@@ -61,6 +62,7 @@ breaking deployed programs that are compiled against the "old" format.
 %package compiler
 Summary:	Protocol Buffers compiler
 Requires:	%{name} = %{EVRD}
+Group:		Development/Other
 
 %description compiler
 This package contains Protocol Buffers compiler for all programming
@@ -68,6 +70,7 @@ languages.
 
 %package devel
 Summary:	Protocol Buffers C++ headers and libraries
+Group:		Development/Other
 Requires:	%{name} = %{EVRD}
 Requires:	%{name}-compiler = %{EVRD}
 Requires:	pkgconfig
@@ -79,6 +82,7 @@ C++ headers and libraries
 
 %package lite
 Summary:	Protocol Buffers LITE_RUNTIME libraries
+Group:		Development/Other
 
 %description lite
 Protocol Buffers built with optimize_for = LITE_RUNTIME.
@@ -91,6 +95,7 @@ lacks descriptors, reflection, and some other features.
 Summary:	Protocol Buffers LITE_RUNTIME development libraries
 Requires:	%{name}-devel = %{EVRD}
 Requires:	%{name}-lite = %{EVRD}
+Group:		Development/Other
 
 %description lite-devel
 This package contains development libraries built with
@@ -103,6 +108,7 @@ lacks descriptors, reflection, and some other features.
 %if %{with python}
 %package python
 Summary:	Python bindings for Google Protocol Buffers
+Group:		Development/{ython
 BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 
@@ -113,6 +119,7 @@ This package contains Python libraries for Google Protocol Buffers
 %package vim
 Summary:	Vim syntax highlighting for Google Protocol Buffers descriptions
 Requires:	vim-enhanced
+Group:		Development/Other
 
 %description vim
 This package contains syntax highlighting for Google Protocol Buffers
@@ -120,6 +127,7 @@ descriptions in Vim editor
 
 %package emacs
 Summary:	Emacs mode for Google Protocol Buffers descriptions
+Group:		Development/Other
 
 %description emacs
 This package contains syntax highlighting for Google Protocol Buffers
@@ -127,6 +135,7 @@ descriptions in the Emacs editor.
 
 %package emacs-el
 Summary:	Elisp source files for Google protobuf Emacs mode
+Group:		Development/Other
 Requires:	protobuf-emacs = %{version}
 
 %description emacs-el
@@ -138,6 +147,7 @@ under GNU Emacs. You do not need to install this package to use
 %if %{with java}
 %package java
 Summary:	Java Protocol Buffers runtime library
+Group:		Development/Java
 BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
 BuildRequires:	maven-local
@@ -160,6 +170,7 @@ This package contains Java Protocol Buffers runtime library.
 
 %package javadoc
 Summary:	Javadocs for %{name}-java
+Group:		Development/Java
 Requires:	jpackage-utils
 Requires:	%{name}-java = %{EVRD}
 
