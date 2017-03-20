@@ -158,16 +158,15 @@ Summary:	Java Protocol Buffers runtime library
 Group:		Development/Java
 BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
-BuildRequires:	maven-local
-BuildRequires:	maven-compiler-plugin
-BuildRequires:	maven-install-plugin
-BuildRequires:	maven-jar-plugin
-BuildRequires:	maven-javadoc-plugin
-BuildRequires:	maven-resources-plugin
-BuildRequires:	maven-surefire-plugin
-BuildRequires:	maven-antrun-plugin
-BuildRequires:	mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:	mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  maven-local
+BuildRequires:  mvn(com.google.code.gson:gson)
+BuildRequires:  mvn(com.google.guava:guava)
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
+BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
+BuildRequires:  mvn(org.easymock:easymock)
 Requires:	java
 Requires:	jpackage-utils
 Provides:	mvn(com.google.protobuf:protobuf-java) = %{version}
