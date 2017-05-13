@@ -1,5 +1,5 @@
 sources:
   "protobuf.rpmlintrc":   92f854d9ba121e8fb6005f2f3cda64e014f59b18
   "protobuf-init.el":   8113c483c4514ccb5ee59936d735e2ba47486b52
-  "protobuf-3.2.0.tar.gz":   2d47c98c7f35d74d475ba0796d345a45c22030fd
   "ftdetect-proto.vim":   6fa827365033ef96eda6f16b422f60a71d2fdc56
+  v3.3.0.tar.gz: 34bcb26fe1eff098224c93b9176fb2400f1f2a84

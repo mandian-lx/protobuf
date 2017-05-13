@@ -8,11 +8,8 @@
 %bcond_without python
 %bcond_without python2
 # Build -java subpackage
-%ifarch %{ix86} x86_64
-%bcond_without java
-%else
+# Currently disabled because of mvn(com.google.truth:truth) dep -- needs to be packaged first
 %bcond_with java
-%endif
 # Don't require gtest
 %bcond_with gtest
 
@@ -21,12 +18,12 @@
 
 Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
-Version:	3.2.0
+Version:	3.3.0
 Release:	1
 Group:		Development/Other
 License:	BSD
 URL:		https://github.com/google/protobuf
-Source0:	https://github.com/google/protobuf/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/google/protobuf/archive/v%{version}.tar.gz
 Source1:	ftdetect-proto.vim
 Source2:	protobuf-init.el
 Source3:	%{name}.rpmlintrc
@@ -160,6 +157,7 @@ BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.code.gson:gson)
+BuildRequires:  mvn(com.google.truth:truth)
 BuildRequires:  mvn(com.google.guava:guava)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
@@ -259,7 +257,8 @@ popd
 %endif
 
 %if %{with java}
-%mvn_build -s -- -f java/pom.xml
+# maven.test.skip=true is required because of extra dependencies
+%mvn_build -s -- -f java/pom.xml -Dmaven.test.skip=true
 %endif
 
 emacs -batch -f batch-byte-compile editors/protobuf-mode.el
