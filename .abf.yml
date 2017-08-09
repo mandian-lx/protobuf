@@ -3,3 +3,4 @@ sources:
   "protobuf-init.el":   8113c483c4514ccb5ee59936d735e2ba47486b52
   "ftdetect-proto.vim":   6fa827365033ef96eda6f16b422f60a71d2fdc56
   v3.3.0.tar.gz: 34bcb26fe1eff098224c93b9176fb2400f1f2a84
+  v3.3.2.tar.gz: c3fbd69969c9ab7628186bc949f02f6ab731793c
