@@ -1,3 +1,5 @@
+%{?_javapackages_macros:%_javapackages_macros}
+
 %define old_libname %mklibname %{name} 8
 %define old_liblite %mklibname %{name}-lite 8
 %define old_libprotoc %mklibname protoc 8
@@ -7,11 +9,7 @@
 # Build -python subpackage
 %bcond_with python
 # Build -java subpackage
-%ifarch %{ix86} x86_64
 %bcond_without java
-%else
-%bcond_with java
-%endif
 # Don't require gtest
 %bcond_with gtest
 
@@ -24,11 +22,12 @@
 
 Summary:	Protocol Buffers - Google's data interchange format
 Name:		protobuf
-Version:	2.6.1
-Release:	3
+Version:	3.3.2
+Release:	1
+Group:		Development/Other
 License:	BSD
 URL:		https://github.com/google/protobuf
-Source0:	https://github.com/google/protobuf/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source0:	https://github.com/google/protobuf/archive/v%{version}.tar.gz
 Source1:	ftdetect-proto.vim
 Source2:	protobuf-init.el
 Source3:	%{name}.rpmlintrc
@@ -140,16 +139,16 @@ under GNU Emacs. You do not need to install this package to use
 Summary:	Java Protocol Buffers runtime library
 BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
-BuildRequires:	maven-local
-BuildRequires:	maven-compiler-plugin
-BuildRequires:	maven-install-plugin
-BuildRequires:	maven-jar-plugin
-BuildRequires:	maven-javadoc-plugin
-BuildRequires:	maven-resources-plugin
-BuildRequires:	maven-surefire-plugin
-BuildRequires:	maven-antrun-plugin
-BuildRequires:	mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:	mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  maven-local
+BuildRequires:  mvn(com.google.code.gson:gson)
+BuildRequires:  mvn(com.google.truth:truth)
+BuildRequires:  mvn(com.google.guava:guava)
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
+BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
+BuildRequires:  mvn(org.easymock:easymock)
 Requires:	java
 Requires:	jpackage-utils
 Provides:	mvn(com.google.protobuf:protobuf-java) = %{version}
@@ -199,10 +198,8 @@ popd
 %endif
 
 %if %{with java}
-pushd java
-%mvn_file : %{name}
-%mvn_build
-popd
+# Tests currently disabled because of mvn(com.google.truth:truth) dep -- needs to be packaged/updated first
+%mvn_build -f -s -- -f java/pom.xml
 %endif
 
 emacs -batch -f batch-byte-compile editors/protobuf-mode.el
