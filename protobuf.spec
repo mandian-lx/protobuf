@@ -1,3 +1,5 @@
+%{?_javapackages_macros:%_javapackages_macros}
+
 %define old_libname %mklibname %{name} 8
 %define old_liblite %mklibname %{name}-lite 8
 %define old_libprotoc %mklibname protoc 8
@@ -8,8 +10,7 @@
 %bcond_without python
 %bcond_without python2
 # Build -java subpackage
-# Currently disabled because of mvn(com.google.truth:truth) dep -- needs to be packaged first
-%bcond_with java
+%bcond_without java
 # Don't require gtest
 %bcond_with gtest
 
@@ -257,8 +258,8 @@ popd
 %endif
 
 %if %{with java}
-# maven.test.skip=true is required because of extra dependencies
-%mvn_build -s -- -f java/pom.xml -Dmaven.test.skip=true
+# Tests currently disabled because of mvn(com.google.truth:truth) dep -- needs to be packaged/updated first
+%mvn_build -f -s -- -f java/pom.xml
 %endif
 
 emacs -batch -f batch-byte-compile editors/protobuf-mode.el
