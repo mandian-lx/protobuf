@@ -158,7 +158,7 @@ BuildRequires:	java-devel >= 1.6
 BuildRequires:	jpackage-utils
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.code.gson:gson)
-BuildRequires:  mvn(com.google.truth:truth)
+#BuildRequires:  mvn(com.google.truth:truth)
 BuildRequires:  mvn(com.google.guava:guava)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
