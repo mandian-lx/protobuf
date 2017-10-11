@@ -1,8 +1,9 @@
 %{?_javapackages_macros:%_javapackages_macros}
 
-%define old_libname %mklibname %{name} 8
-%define old_liblite %mklibname %{name}-lite 8
-%define old_libprotoc %mklibname protoc 8
+%define major 13
+%define old_libname %mklibname %{name} %major
+%define old_liblite %mklibname %{name}-lite %major
+%define old_libprotoc %mklibname protoc %major
 %define old_devname %mklibname %{name} -d
 %define old_statname %mklibname %{name} -d -s
 
