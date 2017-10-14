@@ -1,5 +1,3 @@
-# %{?_javapackages_macros:%_javapackages_macros}
-
 %define major 13
 %define old_libname %mklibname %{name} %major
 %define old_liblite %mklibname %{name}-lite %major
